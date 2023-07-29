@@ -2,7 +2,9 @@
 
 import { Meteors } from "@/components/magicui/meteors";
 import { syne } from "@/utils/font";
+import { sleep } from "@/utils/sleep";
 import axios, { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
@@ -32,16 +34,16 @@ export default function Home() {
     const formData = new FormData();
     formData.append("pdf", file);
 
-    console.log({ formData });
+    await sleep(2000);
 
-    // await axios.post(`${apiUrl}/api/upload`, formData)
-    //   .then((res) => {
-    //     console.log(res.data)
-    //   })
-    //   .catch((e: AxiosError) => {
-    //     console.error(e)
-    //   })
-    // }
+    await axios
+      .post(`${process.env.API_URL}/api/upload`, formData)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e: AxiosError) => {
+        console.error(e);
+      });
   };
 
   return (
@@ -56,20 +58,25 @@ export default function Home() {
       <div className="relative flex items-center justify-center w-full h-full p-20 overflow-hidden border border-gray-800 rounded-lg bg-background">
         <Meteors />
         <div className="flex mt-4 text-sm leading-6 text-gray-600">
-          <label
-            htmlFor="file-upload"
-            className="relative text-3xl font-semibold rounded-md cursor-pointer text-gray-50"
-          >
-            <span>Upload a PDF file</span>
-            <input
-              accept="application/pdf"
-              onChange={onChangeFile}
-              id="file-upload"
-              name="file-upload"
-              type="file"
-              className="sr-only"
-            />
-          </label>
+          {sendingFile ? (
+            <Loader2 className="w-8 h-8 animate-spin text-gray-50" />
+          ) : (
+            <label
+              htmlFor="file-upload"
+              className="relative text-3xl font-semibold rounded-md cursor-pointer text-gray-50"
+            >
+              <span>Upload a PDF file</span>
+              <input
+                disabled={sendingFile}
+                accept="application/pdf"
+                onChange={onChangeFile}
+                id="file-upload"
+                name="file-upload"
+                type="file"
+                className="sr-only"
+              />
+            </label>
+          )}
           {/* <p className="pl-1">or drag and drop</p> */}
         </div>
         <div className="pointer-events-none absolute inset-0 h-full bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]" />
