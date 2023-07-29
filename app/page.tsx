@@ -7,13 +7,21 @@ import { useState } from "react";
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
+  const [sendingFile, setSendingFile] = useState(false);
 
   const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files[0]) {
-      setFile(files[0]);
+    setSendingFile(true);
 
-      await onClickSubmit(files[0]);
+    try {
+      const files = e.target.files;
+      if (files && files[0]) {
+        setFile(files[0]);
+
+        await onClickSubmit(files[0]);
+      }
+    } catch (err) {
+    } finally {
+      setSendingFile(false);
     }
   };
 
@@ -54,6 +62,7 @@ export default function Home() {
           >
             <span>Upload a PDF file</span>
             <input
+              accept="application/pdf"
               onChange={onChangeFile}
               id="file-upload"
               name="file-upload"
