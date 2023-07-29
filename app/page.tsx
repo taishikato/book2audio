@@ -2,7 +2,7 @@
 
 import { Meteors } from "@/components/magicui/meteors";
 import { syne } from "@/utils/font";
-import { sleep } from "@/utils/sleep";
+// import { sleep } from "@/utils/sleep";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
