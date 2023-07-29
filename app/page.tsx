@@ -34,7 +34,7 @@ export default function Home() {
     const formData = new FormData();
     formData.append("pdf", file);
 
-    await sleep(2000);
+    // await sleep(2000);
 
     await axios.post(`${process.env.API_URL}/api/parse-book`, formData);
   };
