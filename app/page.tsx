@@ -1,8 +1,41 @@
-import Image from "next/image";
+"use client";
+
 import { Meteors } from "@/components/magicui/meteors";
 import { syne } from "@/utils/font";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
 
 export default function Home() {
+  const [file, setFile] = useState<File | null>(null);
+
+  const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0]) {
+      setFile(files[0]);
+
+      await onClickSubmit(files[0]);
+    }
+  };
+
+  const onClickSubmit = async (file: FileList[0]) => {
+    if (!file) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("pdf", file);
+
+    console.log({ formData });
+
+    // await axios.post(`${apiUrl}/api/upload`, formData)
+    //   .then((res) => {
+    //     console.log(res.data)
+    //   })
+    //   .catch((e: AxiosError) => {
+    //     console.error(e)
+    //   })
+    // }
+  };
+
   return (
     <main className="flex flex-col items-center justify-start min-h-screen p-24 gap-y-20">
       <div className="z-10 items-center justify-between w-full max-w-5xl font-mono text-sm lg:flex">
@@ -21,6 +54,7 @@ export default function Home() {
           >
             <span>Upload a PDF file</span>
             <input
+              onChange={onChangeFile}
               id="file-upload"
               name="file-upload"
               type="file"
