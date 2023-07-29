@@ -8,7 +8,6 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
-  const [file, setFile] = useState<File | null>(null);
   const [sendingFile, setSendingFile] = useState(false);
 
   const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,9 +16,7 @@ export default function Home() {
     try {
       const files = e.target.files;
       if (files && files[0]) {
-        setFile(files[0]);
-
-        await onClickSubmit(files[0]);
+        await Submit(files[0]);
       }
     } catch (err) {
     } finally {
@@ -27,7 +24,7 @@ export default function Home() {
     }
   };
 
-  const onClickSubmit = async (file: FileList[0]) => {
+  const Submit = async (file: FileList[0]) => {
     if (!file) {
       return;
     }
@@ -36,14 +33,7 @@ export default function Home() {
 
     await sleep(2000);
 
-    await axios
-      .post(`${process.env.API_URL}/api/upload`, formData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((e: AxiosError) => {
-        console.error(e);
-      });
+    await axios.post(`${process.env.API_URL}/api/parse-book`, formData);
   };
 
   return (
